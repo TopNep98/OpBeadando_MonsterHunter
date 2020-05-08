@@ -1,0 +1,31 @@
+#!/bin/bash
+
+echo "Are you familiar with the monsters in the game and their ids? (yes/no)"
+echo ""
+
+read answer
+
+curl "https://mhw-db.com/monsters" | tr ',' "\n" > Monsters 
+grep -A 3 -B 2 '"species"' Monsters > MonsterId 
+
+echo "Do you wish to sort edler dragons only? (yes/no)"
+read elder
+
+if [ $elder == yes ]
+then
+ grep -A 3 -B 2 'elder' Monsters > ElderDragons
+ cat ElderDragons
+fi
+ 
+if [ $answer == no -a $elder == no ]
+then
+ cat MonsterId
+fi
+
+echo "Chose a mosnter by their id!"
+
+read id
+echo ""
+echo ""
+curl "https://mhw-db.com/monsters/"$id | tr ',' "\n" > Monster 
+cat Monster
